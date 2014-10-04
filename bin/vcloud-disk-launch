@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'vcloud/disk_launcher'
+
+Vcloud::DiskLauncher::Cli.new(ARGV).run
