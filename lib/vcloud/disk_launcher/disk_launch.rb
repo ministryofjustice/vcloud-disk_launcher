@@ -16,7 +16,7 @@ module Vcloud
       def run(config_file = nil)
         config = @config_loader.load_config(config_file, Vcloud::DiskLauncher::Schema::DISK_LAUNCH)
 
-        config[:disks].each do |disk_config|
+        config[:independent_disks].each do |disk_config|
           puts disk_config
         end
 
