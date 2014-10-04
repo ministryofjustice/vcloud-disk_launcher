@@ -1,2 +1,4 @@
-vcloud-disk-launcher
+vCloud Disk Launcher
 ====================
+
+
