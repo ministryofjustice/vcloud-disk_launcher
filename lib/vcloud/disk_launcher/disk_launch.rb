@@ -17,7 +17,11 @@ module Vcloud
         config = @config_loader.load_config(config_file, Vcloud::DiskLauncher::Schema::DISK_LAUNCH)
 
         config[:independent_disks].each do |disk_config|
-          puts disk_config
+          Vcloud::Core::IndependentDisk.create(
+            Vcloud::Core::Vdc.get_by_name(disk_config[:vdc_name]),
+            disk_config[:name],
+            disk_config[:size]
+          )
         end
 
       end
