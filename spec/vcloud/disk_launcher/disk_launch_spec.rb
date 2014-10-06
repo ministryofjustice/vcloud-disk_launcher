@@ -19,6 +19,8 @@ describe Vcloud::DiskLauncher::DiskLaunch do
     }
     let(:mock_vdc_1) { double(:mock_vdc, :name => "TestVDC 1") }
     let(:mock_vdc_2) { double(:mock_vdc, :name => "TestVDC 2") }
+    let(:mock_disk_1) { double(:mock_disk_1, :id => "12341234-1234-1234-1234-123455550001") }
+    let(:mock_disk_2) { double(:mock_disk_2, :id => "12341234-1234-1234-1234-123455550002") }
 
     before(:each) do
       config_loader = double(:config_loader)
@@ -32,9 +34,20 @@ describe Vcloud::DiskLauncher::DiskLaunch do
 
     it "should call Core::IndependentDisk.create once for each disk" do
       expect(Vcloud::Core::IndependentDisk).
-        to receive(:create).with(mock_vdc_1, disk1[:name], disk1[:size])
+        to receive(:create).with(mock_vdc_1, disk1[:name], disk1[:size]).and_return(mock_disk_1)
       expect(Vcloud::Core::IndependentDisk).
-        to receive(:create).with(mock_vdc_2, disk2[:name], disk2[:size])
+        to receive(:create).with(mock_vdc_2, disk2[:name], disk2[:size]).and_return(mock_disk_2)
+      expect(Vcloud::Core.logger).to receive(:info).exactly(2).times
+      subject.run('input_config_yaml')
+    end
+
+    it "will still create disk2 if disk1 already exists (skipping disk1)" do
+      expect(Vcloud::Core::IndependentDisk).
+        to receive(:create).with(mock_vdc_1, disk1[:name], disk1[:size]).
+        and_raise(Vcloud::Core::IndependentDisk::DiskAlreadyExistsException)
+      expect(Vcloud::Core::IndependentDisk).
+        to receive(:create).with(mock_vdc_2, disk2[:name], disk2[:size]).and_return(mock_disk_2)
+      expect(Vcloud::Core.logger).to receive(:info).exactly(2).times
       subject.run('input_config_yaml')
     end
 
