@@ -1,2 +1,2 @@
-vcloud-disk-launcher
+vcloud-disk_launcher
 ====================
