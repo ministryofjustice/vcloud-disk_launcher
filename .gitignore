@@ -1,0 +1,9 @@
+*.gem
+*.rbc
+/.bundle/
+/.ruby-version
+/Gemfile.lock
+/coverage/
+/pkg/
+fog_integration_test.config
+/spec/integration/vcloud_tools_testing_config.yaml
